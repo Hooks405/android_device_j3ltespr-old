@@ -87,8 +87,6 @@ import java.util.Random;
  */
 public class SamsungA5RIL extends RIL implements CommandsInterface {
 
-    private boolean setPreferredNetworkTypeSeen = false;
-
     private static final int RIL_REQUEST_DIAL_EMERGENCY = 10016;
     private static final int RIL_UNSOL_RESPONSE_IMS_NETWORK_STATE_CHANGED = 1037;
     private static final int RIL_UNSOL_DEVICE_READY_NOTI = 11008;
@@ -459,19 +457,6 @@ public class SamsungA5RIL extends RIL implements CommandsInterface {
             Rlog.d(RILJ_LOG_TAG, "setWbAmr(): setting audio parameter - wb_amr=off");
             mAudioManager.setParameters("wb_amr=off");
         }
-    }
-
-    @Override
-    public void setPreferredNetworkType(int networkType , Message response) {
-        riljLog("setPreferredNetworkType: " + networkType);
-
-        if (!setPreferredNetworkTypeSeen) {
-            riljLog("Need to reboot modem!");
-            setRadioPower(false, null);
-            setPreferredNetworkTypeSeen = true;
-        }
-
-        super.setPreferredNetworkType(networkType, response);
     }
 
     protected Object
