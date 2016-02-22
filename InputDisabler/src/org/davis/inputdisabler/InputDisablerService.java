@@ -9,9 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
-import org.davis.inputdisabler.Constants;
+import org.davis.inputdisabler.utils.Constants;
 
 public class InputDisablerService extends Service {
 
