@@ -66,14 +66,14 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
                     public void run() {
                         if(!mScreenOn) {
                             if(DEBUG)
-                                Log.d(TAG, "Screen was turned on while dozing");
+                                Log.d(TAG, "Screen was turned off while dozing");
 
                             Device.enableKeys(false);
                         } else {
                             if(DEBUG)
-                                Log.d(TAG, "Screen was turned off while dozing");
+                                Log.d(TAG, "Screen was turned on while dozing");
 
-                            Device.enableDevices(true);
+                            handleScreenOn();
                         }
                     }
                 };
@@ -133,12 +133,15 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
 
     }
 
-    // Handles screen on (only touch)
+    // Handles screen on
     private void handleScreenOn() {
         // Perform enable->disable->enable sequence
         Device.enableTouch(true);
         Device.enableTouch(false);
         Device.enableTouch(true);
+
+        // Enable keys
+        Device.enableKeys(true);
 
         mScreenOn = true;
     }
