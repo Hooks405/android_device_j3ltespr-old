@@ -2,6 +2,7 @@ package org.davis.inputdisabler;
 
 /*
  * Created by Dāvis Mālnieks on 04/10/2015
+ * 	Some updates/fixes on 23/02/2016 and 24/02/2016
  */
 
 import android.content.BroadcastReceiver;
@@ -48,7 +49,7 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
 
         if(DEBUG)
             Log.d(TAG, "Double tap to wake is " +
-                    (isDoubleTapEnabled != 0 ? "" : "not ") + "enabled");
+                    ((isDoubleTapEnabled != 0) ? "" : "not ") + "enabled");
 
         switch (intent.getAction()) {
             case Intent.ACTION_SCREEN_ON:
@@ -63,10 +64,11 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
                     Log.d(TAG, "Screen off!");
 
                 // Don't turn off touch when double tap is enabled
-                if(isDoubleTapEnabled !=0)
+                if(isDoubleTapEnabled != 0) {
                     Device.enableKeys(false);
-                else
+                } else {
                     Device.enableDevices(false);
+                }
 
                 // Screen is now off
                 mScreenOn = false;
@@ -133,7 +135,7 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
 
             Device.enableDevices(false);
 
-	        // Screen is off no
+	        // Screen is off now
 	        mScreenOn = false;
         } else {
             if(DEBUG)
