@@ -12,11 +12,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import org.davis.inputdisabler.utils.Constants;
 import org.davis.inputdisabler.utils.Device;
+
+import static android.provider.Settings.Secure.DOUBLE_TAP_TO_WAKE;
 
 public class ScreenStateReceiver extends BroadcastReceiver implements SensorEventListener {
 
@@ -40,6 +43,13 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
         if(DEBUG)
             Log.d(TAG, "Received intent: " + intent.getAction());
 
+        int isDoubleTapEnabled = Settings.Secure.getInt(context.getContentResolver(),
+                DOUBLE_TAP_TO_WAKE, 0);
+
+        if(DEBUG)
+            Log.d(TAG, "Double tap to wake is " +
+                    (isDoubleTapEnabled != 0 ? "" : "not ") + "enabled");
+
         switch (intent.getAction()) {
             case Intent.ACTION_SCREEN_ON:
                 if(DEBUG)
@@ -52,8 +62,13 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
                 if(DEBUG)
                     Log.d(TAG, "Screen off!");
 
-                Device.enableKeys(false);
+                // Don't turn off touch when double tap is enabled
+                if(isDoubleTapEnabled !=0)
+                    Device.enableKeys(false);
+                else
+                    Device.enableDevices(false);
 
+                // Screen is now off
                 mScreenOn = false;
                 break;
             case Constants.ACTION_DOZE_PULSE_STARTING:
@@ -135,14 +150,15 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
 
     // Handles screen on
     private void handleScreenOn() {
+        // Enable keys
+        Device.enableKeys(true);
+
         // Perform enable->disable->enable sequence
         Device.enableTouch(true);
         Device.enableTouch(false);
         Device.enableTouch(true);
 
-        // Enable keys
-        Device.enableKeys(true);
-
+        // Screen is now on
         mScreenOn = true;
     }
 
