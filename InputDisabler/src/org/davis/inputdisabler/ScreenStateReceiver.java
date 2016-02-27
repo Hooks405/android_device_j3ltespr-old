@@ -2,7 +2,6 @@ package org.davis.inputdisabler;
 
 /*
  * Created by Dāvis Mālnieks on 04/10/2015
- * 	Some updates/fixes on 23/02/2016 and 24/02/2016
  */
 
 import android.content.BroadcastReceiver;
@@ -30,11 +29,19 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
 
     android.os.Handler mDozeDisable;
 
-    static boolean mScreenOn;
-
     SensorManager mSensorManager;
 
     Sensor mSensor;
+
+    // State
+
+    static final int STATE_OFF = 0;
+
+    static final int STATE_ON = 1;
+
+    static final int STATE_DOZE = 2;
+
+    static int mScreenState = STATE_OFF;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -44,7 +51,8 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
         if(DEBUG)
             Log.d(TAG, "Received intent: " + intent.getAction());
 
-        int isDoubleTapEnabled = Settings.Secure.getInt(context.getContentResolver(),
+        // Check if double tap is enabled
+        final int isDoubleTapEnabled = Settings.Secure.getInt(context.getContentResolver(),
                 DOUBLE_TAP_TO_WAKE, 0);
 
         if(DEBUG)
@@ -57,7 +65,9 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
                     Log.d(TAG, "Screen on!");
 
                 // Perform enable->disable->enable sequence
-                handleScreenOn();
+                handleScreenOn(true);
+
+                mScreenState = STATE_ON;
                 break;
             case Intent.ACTION_SCREEN_OFF:
                 if(DEBUG)
@@ -71,26 +81,43 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
                 }
 
                 // Screen is now off
-                mScreenOn = false;
+                mScreenState = STATE_OFF;
                 break;
             case Constants.ACTION_DOZE_PULSE_STARTING:
                 if(DEBUG)
                     Log.d(TAG, "Doze");
 
+                // Doze is active
+                mScreenState = STATE_DOZE;
+
                 mDozeDisable = new Handler();
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        if(!mScreenOn) {
-                            if(DEBUG)
-                                Log.d(TAG, "Screen was turned off while dozing");
+                        switch (mScreenState) {
+                            case STATE_DOZE:
+                                if(DEBUG)
+                                    Log.d(TAG, "Stopped dozing, disable inputs");
 
-                            Device.enableKeys(false);
-                        } else {
-                            if(DEBUG)
-                                Log.d(TAG, "Screen was turned on while dozing");
+                                // Screen is off now
+                                mScreenState = STATE_OFF;
 
-                            handleScreenOn();
+                                // Don't turn off touch when double tap is enabled
+                                if(isDoubleTapEnabled != 0) {
+                                    Device.enableKeys(false);
+                                } else {
+                                    Device.enableDevices(false);
+                                }
+                                break;
+                            case STATE_ON:
+                                if(DEBUG)
+                                    Log.d(TAG, "Screen was turned on while dozing");
+                                break;
+                            case STATE_OFF:
+                                if(DEBUG)
+                                    Log.d(TAG, "Screen was turned off while dozing");
+                                break;
+
                         }
                     }
                 };
@@ -98,7 +125,7 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
 
                 // Don't enable touch keys when dozing
                 // Perform enable->disable->enable sequence
-                handleScreenOn();
+                handleScreenOn(false);
                 break;
             case TelephonyManager.ACTION_PHONE_STATE_CHANGED:
                 if(DEBUG)
@@ -118,8 +145,10 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
                             mSensorManager.unregisterListener(this);
                         }
 
-			            if(!mScreenOn) {
-                            handleScreenOn();
+			            if(mScreenState != STATE_ON) {
+                            handleScreenOn(true);
+
+                            mScreenState = STATE_ON;
 			            }
                         break;
                 }
@@ -135,13 +164,15 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
 
             Device.enableDevices(false);
 
-	        // Screen is off now
-	        mScreenOn = false;
+	        // Screen is off no
+	        mScreenState = STATE_OFF;
         } else {
             if(DEBUG)
                 Log.d(TAG, "Proximity: screen on");
 
-            handleScreenOn();
+            handleScreenOn(true);
+
+            mScreenState = STATE_ON;
         }
     }
 
@@ -151,17 +182,15 @@ public class ScreenStateReceiver extends BroadcastReceiver implements SensorEven
     }
 
     // Handles screen on
-    private void handleScreenOn() {
+    private void handleScreenOn(boolean keys) {
         // Enable keys
-        Device.enableKeys(true);
+        if(keys)
+            Device.enableKeys(true);
 
         // Perform enable->disable->enable sequence
         Device.enableTouch(true);
         Device.enableTouch(false);
         Device.enableTouch(true);
-
-        // Screen is now on
-        mScreenOn = true;
     }
 
 }
