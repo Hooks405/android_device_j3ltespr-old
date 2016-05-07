@@ -6,11 +6,14 @@ package org.davis.inputdisabler.utils;
 
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 
 public final class Device {
 
-    public static final String TAG = "Device";
+    public static final String TAG = "InputDisablerDevice";
 
     /*
      * Enables or disables input devices by writing to sysfs path
@@ -18,10 +21,14 @@ public final class Device {
     public static void enableDevices(boolean enable, boolean touch, boolean keys) {
         // Turn on keys input
         if(keys) {
-            try {
-                write_sysfs(Constants.TK_PATH, enable);
-            } catch (Exception e) {
-                Log.e(TAG, "Failed to " + (enable ? "enable" : "disable") + " keys");
+            if(!(enable && read_sysfs(Constants.TK_FORCE_DISABLE) > 0)) {
+                try {
+                    write_sysfs(Constants.TK_PATH, enable);
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to " + (enable ? "enable" : "disable") + " keys");
+                }
+            } else {
+                Log.d(TAG, "Keys are force disabled, not turning on");
             }
         }
 
@@ -60,6 +67,21 @@ public final class Device {
         fos.close();
 
         return true;
+    }
+
+    // Reads integer value from sysfs, returns value if success, -1 if fail
+    public static int read_sysfs(String path) {
+        String value;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(path));
+            value = br.readLine();
+            br.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return -1;
+        }
+
+        return Integer.parseInt(value);
     }
 
 }

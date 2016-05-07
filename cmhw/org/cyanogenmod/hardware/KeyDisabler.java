@@ -17,6 +17,7 @@
 package org.cyanogenmod.hardware;
 
 import org.cyanogenmod.hardware.util.FileUtils;
+
 import java.io.File;
 
 /*
@@ -32,6 +33,8 @@ public class KeyDisabler {
 
     private static String CONTROL_PATH = "/sys/class/input/input1/enabled";
 
+    private static String CONTROL_PATH_CONTROL = "/sys/class/sec/sec_touchkey/force_disable";
+
     public static boolean isSupported() {
         return new File(CONTROL_PATH).exists();
     }
@@ -41,7 +44,8 @@ public class KeyDisabler {
     }
 
     public static boolean setActive(boolean state) {
-        return FileUtils.writeLine(CONTROL_PATH, (state ? "0" : "1"));
+        return FileUtils.writeLine(CONTROL_PATH, (state ? "0" : "1"))
+                && FileUtils.writeLine(CONTROL_PATH_CONTROL, (state ? "0" : "1"));
     }
 
 }

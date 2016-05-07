@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.davis.inputdisabler"
     coreApp="true"
-    android:versionCode="2"
-    android:versionName="2.0"
+    android:versionCode="3"
+    android:versionName="3.0"
     android:sharedUserId="android.uid.system">
 
     <!-- Need permission to listen when boot is completed (and start the service at that point) -->
