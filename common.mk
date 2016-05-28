@@ -130,6 +130,10 @@ PRODUCT_PACKAGES += \
     libqcomfm_jni \
     qcom.fmradio
 
+# Gello
+PRODUCT_PACKAGES += \
+    Gello
+
 # IPv6 tethering
 PRODUCT_PACKAGES += \
     ebtables \
