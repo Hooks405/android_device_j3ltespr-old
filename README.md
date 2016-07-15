@@ -19,7 +19,7 @@ Device configuration for Samsung Galaxy j3 (Qualcomm variants)
 
 
     <!-- Vendor -->
-    <project path="vendor/samsung" name="MSM8916-Samsung/proprietary_vendor_samsung" revision="cm-13.0" />
+    <!--<project path="vendor/samsung" name="MSM8916-Samsung/proprietary_vendor_samsung" revision="cm-13.0" />-->
 
     <!-- Common device repos -->
     <project path="device/samsung/qcom-common" name="CyanogenMod/android_device_samsung_qcom-common" revision="cm-13.0" />
