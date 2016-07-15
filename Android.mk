@@ -15,9 +15,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-SAMSUNG_TARGETS := a5ultexx a5ltexx
-
-ifneq ($(filter $(SAMSUNG_TARGETS),$(TARGET_DEVICE)),)
+ifneq ($(filter $(j3ltespr),$(TARGET_DEVICE)),)
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
 include $(CLEAR_VARS)

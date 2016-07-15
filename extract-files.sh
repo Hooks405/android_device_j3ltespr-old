@@ -1,38 +1,35 @@
 #!/bin/bash
 
-set -e
-
-export VENDOR=samsung
-export DEVICE=a5-common
-
-function extract() {
-    for FILE in `egrep -v '(^#|^$)' $1`; do
-        OLDIFS=$IFS IFS=":" PARSING_ARRAY=($FILE) IFS=$OLDIFS
-        FILE=`echo ${PARSING_ARRAY[0]} | sed -e "s/^-//g"`
-        DEST=${PARSING_ARRAY[1]}
-        if [ -z $DEST ]; then
-            DEST=$FILE
-        fi
-        DIR=`dirname $FILE`
-        if [ ! -d $2/$DIR ]; then
-            mkdir -p $2/$DIR
-        fi
-        # Try CM target first
-        adb pull /system/$DEST $2/$DEST
-        # if file does not exist try OEM target
-        if [ "$?" != "0" ]; then
-            adb pull /system/$FILE $2/$DEST
-        fi
-    done
-}
-
+VENDOR=samsung
+DEVICE=j3ltespr
 
 BASE=../../../vendor/$VENDOR/$DEVICE/proprietary
 rm -rf $BASE/*
 
-DEVBASE=../../../vendor/$VENDOR/$DEVICE/proprietary
-rm -rf $DEVBASE/*
+for FILE in `egrep -v '(^#|^$)' proprietary-files.txt`; do
+    OLDIFS=$IFS IFS=":" PARSING_ARRAY=($FILE) IFS=$OLDIFS
+    FILE=${PARSING_ARRAY[0]}
+    DEST=${PARSING_ARRAY[1]}
+    if [ -z $DEST ]
+    then
+        DEST=$FILE
+    fi
+    DIR=`dirname $FILE`
+    if [ ! -d $BASE/$DIR ]; then
+        mkdir -p $BASE/$DIR
+    fi
 
-extract ../../$VENDOR/$DEVICE/proprietary-files.txt $DEVBASE
+    if [ -z "$STOCK_ROM_DIR" ]; then
+        adb pull /system/$FILE $BASE/$DEST
+    else
+        cp $STOCK_ROM_DIR/$FILE $BASE/$DEST
+    fi
 
-./../../$VENDOR/$DEVICE/setup-makefiles.sh
+    # if file does not exist try destination
+    if [ "$?" != "0" ]
+    then
+        adb pull /system/$DEST $BASE/$DEST
+    fi
+done
+
+./setup-makefiles.sh
