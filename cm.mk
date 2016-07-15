@@ -16,7 +16,7 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit device configuration
-$(call inherit-product, device/samsung/j3ltespr/device.mk)
+$(call inherit-product, device/samsung/j3ltespr/cm_j3ltespr.mk)
 
 # Inherit some common CM stuff.
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
