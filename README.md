@@ -15,7 +15,7 @@ Device configuration for Samsung Galaxy j3 (Qualcomm variants)
     <project path="device/samsung/j3ltespr" name="Hooks405/android_device_j3ltespr" revision="cm-13.0" />
 
     <!-- Kernels -->
-    <project path="kernel/samsung/j3ltespr" name="Grace5921/kernel_samsung_j3ltespr" revision="cm-12.1" />
+    <project path="kernel/samsung/j3ltespr" name="Hooks405/kernel_samsung_j3ltespr" revision="cm-13.0" />
 
 
     <!-- Vendor -->
