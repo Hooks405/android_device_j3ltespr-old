@@ -1,3 +1,3 @@
-add_lunch_combo cm_a8eltezh-userdebug
-add_lunch_combo cm_a8eltezh-eng
+add_lunch_combo cm_j3ltespr-userdebug
+add_lunch_combo cm_j3ltespr-eng
 
