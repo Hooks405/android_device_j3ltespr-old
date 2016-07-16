@@ -267,6 +267,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/recovery/twrp.fstab:recovery/root/etc/twrp.fstab
 
+# For errors
+PRODUCT_COPY_FILES += \
+vendor/lib/libtime_genoff.so:obj/lib/libtime_genoff.so
+
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=SamsungA5RIL
