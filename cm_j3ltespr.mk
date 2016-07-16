@@ -269,7 +269,7 @@ PRODUCT_COPY_FILES += \
 
 # For errors
 PRODUCT_COPY_FILES += \
-vendor/samsung/j3ltespr/proprietary/lib/libtime_genoff.so:obj/lib/libtime_genoff.so
+vendor/samsung/j3ltespr/proprietary/vendor/lib/libtime_genoff.so:obj/lib/libtime_genoff.so
 
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
