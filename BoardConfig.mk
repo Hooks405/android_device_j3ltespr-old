@@ -38,6 +38,9 @@ TARGET_CPU_CORTEX_A53 := true
 
 TARGET_SPECIFIC_HEADER_PATH := device/samsung/j3ltespr/include
 
+# Assert
+TARGET_OTA_ASSERT_DEVICE := j3ltespr,SM-J320P,J320P
+
 # Kernel
 BOARD_CUSTOM_BOOTIMG_MK      := device/samsung/j3ltespr/mkbootimg.mk
 BOARD_KERNEL_CMDLINE         := console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci androidboot.selinux=permissive
