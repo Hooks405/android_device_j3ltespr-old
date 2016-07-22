@@ -243,6 +243,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
     $(LOCAL_PATH)/configs/wifi/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf
 
+# For errors
+PRODUCT_COPY_FILES += \
+vendor/samsung/j3ltespr/proprietary/vendor/lib/libtime_genoff.so:obj/lib/libtime_genoff.so
+
 # SoftAP
 PRODUCT_PACKAGES += \
     libcurl \
