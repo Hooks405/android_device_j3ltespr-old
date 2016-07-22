@@ -70,16 +70,12 @@ BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 
-# Custom RIL class
-<<<<<<< HEAD:BoardConfigCommon.mk
-BOARD_RIL_CLASS := ../../../device/samsung/a5-common/ril/
-
 # NFC
 BOARD_HAVE_NFC := true
 =======
 BOARD_RIL_CLASS := ../../../device/samsung/j3ltespr/ril/
 USE_DEVICE_SPECIFIC_DATASERVICES := true
->>>>>>> 56d3478... updates for j3ltespr:BoardConfig.mk
+
 
 # Fonts
 EXTENDED_FONT_FOOTPRINT := true
