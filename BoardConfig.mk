@@ -72,7 +72,6 @@ BLUETOOTH_HCI_USE_MCT := true
 
 # NFC
 BOARD_HAVE_NFC := true
-=======
 BOARD_RIL_CLASS := ../../../device/samsung/j3ltespr/ril/
 USE_DEVICE_SPECIFIC_DATASERVICES := true
 
