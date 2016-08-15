@@ -50,6 +50,7 @@ BOARD_KERNEL_TAGS_OFFSET     := 0x01e00000
 BOARD_KERNEL_SEPARATED_DT    := true
 BOARD_KERNEL_PAGESIZE        := 2048
 TARGET_KERNEL_SOURCE         := kernel/samsung/j3ltespr
+BOARD_KERNEL_IMAGE_NAME      := Image
 TARGET_KERNEL_CONFIG         := msm8916_sec_defconfig
 TARGET_KERNEL_VARIANT_CONFIG := msm8916_sec_j3lte_spr_defconfig
 TARGET_KERNEL_SELINUX_CONFIG := selinux_defconfig
